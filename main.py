@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, session, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -22,34 +22,41 @@ def index():
     return redirect('/blog')
 
 @app.route('/blog', methods=['POST','GET'])
-def blog():
+def blogs():
     single_post = request.args.get('id')
-    blog = Blog.query.all()
-    return render_template("homepage.html", blog=blog, single_post=single_post)
+    blogs = blog.query.all()
+    return render_template("homepage.html", blogs=blogs, single_post=single_post)
 
-@app.route('/new_post', methods=['POST','GET'])
+@app.route('/single_post', methods=['POST','GET'])
+def single_post():
+    id = request.args.get('id')
+    single_post = blog.query.filter_by(id=id).first()
+    return render_template("single_post.html", single_post=single_post)
+
+@app.route('/newpost', methods=['POST','GET'])
 def new_post():
-
-    blog_title = request.form["title"]
-    body = request.form["body"]
-    empty_field_error = "This field must be filled out!"
-    if blog_title == "" and body == "":
-        title_error = empty_field_error
-        body_error = empty_field_error
-        return render_template("newpost.html", title_error=title_error, body_error=body_error)
-    elif blog_title == "":
-        title_error = empty_field_error
-        return render_template("newpost.html", title_error=title_error, body=body)
-    elif body == "":
-        body_error = empty_field_error
-        return render_template("newpost.html", title=blog_title, body_error=body_error)
-
+    if request.method == 'POST':
+        title = request.form["title"]
+        body = request.form["body"]
+        empty_field_error = "This field must be filled out!"
+        if title == "" and body == "":
+            title_error = empty_field_error
+            body_error = empty_field_error
+            return render_template("newpost.html", body=body, title=title, title_error=title_error, body_error=body_error)
+        elif title == "":
+            title_error = empty_field_error
+            return render_template("newpost.html", title=title, title_error=title_error, body=body)
+        elif body == "":
+            body_error = empty_field_error
+            return render_template("newpost.html", body=body, title=title, body_error=body_error)
+        else:
+            new_post = blog(title, body)
+            db.session.add(new_post)
+            db.session.commit()
+            
+            return redirect ("/single_post?id="+str(new_post.id))
     else:
-        new_post = Blog(blog_title, body)
-        db.session.add(new_post)
-        db.session.commit()
-        url = '/blog?id='+str(new_post.id)
-        return redirect (url)    
+        return render_template("newpost.html")
 
 
 if __name__ == '__main__':

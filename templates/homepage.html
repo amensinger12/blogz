@@ -5,11 +5,11 @@
 <h1 align="center">Build a Blog</h1>
 
 <ul>
-    {% for single_post in blog%}
+    {% for single_post in blogs%}
         <li>
-            <h2 class='title'><a href="/?id={{blog.id}}">{{blog.title}}</a></h2>
-            <p class= 'blog'>{{blog.body}}</p>
+            <h2 class='title'><a href="/single_post?id={{ single_post.id }}">{{single_post.title }}</a></h2>
+            <p class= 'blog'>{{ single_post.body }}</p>
         </li>
-    {% endfor %}
+    {% endfor %} 
 </ul>
 {% endblock %}

@@ -2,15 +2,15 @@
 
 {% block content %}
     <h1 align='center'>Add a New Blog Post</h1>
-    <form action='/' method='POST'>
-        <label>New Blog Title <br>
-            <input type="text" name="title" value="{{title}}"/>
-        </label><br>
-        <label>New Blog Post <br>
-            <input type="text" name="body" value="{{body}}"/>
-        </label><br>
+    <form method='POST'>
+        <label>New Blog Post Title</label>
+        <input type="text" name="title" value="{{ title }}">
+        <p class="error"> {{ title_error }} </p><br>
 
-        <input type="submit" value="Add Post"/>
+        <label>New Blog Post Body</label>
+        <input type="text" name="body" value="{{ body }}">
+        <p class="error"> {{ body_error }} </p>
+        <input type="submit", value="submit">
     </form>
     
 {% endblock %}
