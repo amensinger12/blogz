@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 align="center">All User Blogs</h1>
+
+<ul>
+    {% for single_post in blogs %}
+        <li>
+            <h2 class='title'><a href="/single_post?id={{ single_post.id }}">{{single_post.title }}</a></h2>
+            <p class= 'blog'>{{ single_post.body }}</p>
+        </li>
+    {% endfor %} 
+</ul>
+{% endblock %}
