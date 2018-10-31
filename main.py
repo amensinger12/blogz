@@ -42,7 +42,7 @@ def login():
     username_error = "This username is incorrect"
     password_error = "This password is incorrect"
 
-    if request.form == "POST":
+    if request.method == "POST":
         username = request.form['username']
         password = request.form ['password']
         User = user.query.filter_by(username=username).first()
@@ -66,14 +66,21 @@ def blogs():
     single_post = request.args.get('id')
     blogs = blog.query.all()
     return render_template("all_blogs.html", blogs=blogs, single_post=single_post)
+    
+@app.route('/userblog', methods=['POST','GET'])
+def userblog():
+    user_id = request.args.get('id')
+    User = user.query.filter_by(id=user_id).first()
+    user_blog = blog.query.filter_by(owner=User).all()
+    return render_template("singleUser.html", user_blog=user_blog)
 
 @app.route('/single_post', methods=['POST','GET'])
 def single_post():
     id = request.args.get('id')
     single_post = blog.query.filter_by(id=id).first()
-    user_id = request.args.get('userid')
-    User = user.query.filter_by(id=user_id).first()
-    return render_template("single_post.html", single_post=single_post, user_id=user_id, User=User)
+    user_id = request.args.get('id')
+    single_post = blog.query.filter_by(id=id).first()
+    return render_template("single_post.html", single_post=single_post, user_id=user_id, User=single_post.owner.username)
 
 @app.route('/newpost', methods=['POST','GET'])
 def new_post():

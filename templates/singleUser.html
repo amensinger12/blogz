@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<h1 align="center">Build a Blog</h1>
+<h1 align="center">User's Blog</h1>
 
 <ul>
-    {% for single_post in blogs%}
+    {% for post in user_blog%}
         <li>
-            <h2 class='title'><a href="/single_post?id={{ single_post.id }}">{{single_post.title }}</a></h2>
-            <p class= 'blog'>{{ single_post.body }}</p>
+            <h2 class='title'><a href="/single_post?id={{ post.id }}">{{  post.title }}</a></h2>
+            <p class= 'blog'>{{ post.body }}</p>
         </li>
     {% endfor %} 
 </ul>
